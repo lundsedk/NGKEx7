@@ -1,5 +1,5 @@
-SOURCES= file_client.cpp iknlib.cpp
-EXE = prog
+SOURCES= get_measurement.cpp iknlib.cpp
+EXE = get_measurement
 CXXFLAGS =-I. 
 ARCH?=x86-64
 ifeq (${ARCH},x86-64) 
@@ -12,8 +12,10 @@ CXX=arm-rpizw-g++
 BUILD_DIR=build/arm
 BIN_DIR=bin/arm
 endif
+
 OBJECTS = $(addprefix $(BUILD_DIR)/,${SOURCES:.cpp=.o})
 DEPS= $(addprefix $(BUILD_DIR)/,${SOURCES:.cpp=.d})
+
 all: $(BIN_DIR)/$(EXE)
 $(BIN_DIR)/$(EXE): $(OBJECTS)  $(DEPS)
 	mkdir -p $(BIN_DIR)

@@ -1,5 +1,5 @@
-SOURCES= file_server.cpp iknlib.cpp
-EXE = prog
+SOURCES= measurement_server.cpp iknlib.cpp
+EXE = measurement_server
 CXXFLAGS =-I. 
 ARCH?=x86-64
 ifeq (${ARCH},x86-64) 

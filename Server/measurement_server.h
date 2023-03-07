@@ -1,4 +1,0 @@
-
-
-void checkFileName();
-void sendFile();
