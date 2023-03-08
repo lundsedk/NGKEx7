@@ -27,12 +27,12 @@ int main(int argc, char *argv[])
 
 	char receivedMess[256] = {0};
 
-	int sockfd, n; // all used?
+	int sockfd, readState; // all used?
 	struct sockaddr_in serv_addr;
 	socklen_t serv_addr_len;
 	struct hostent *server;
 	char commandChar[1] = {argv[2][0]};
-	char buffer[256];
+	char readBuffer[256];
 
 
 
@@ -62,6 +62,13 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
+	readState = recvfrom(sockfd, readBuffer, 255, 0, (struct sockaddr*) &serv_addr, &serv_addr_len);
+	if (readState < 0) { 
+		error("\nRead error");
+		close(sockfd);
+		exit(-1);
+	}
+	printf("recived: %s", readBuffer);
 
 
 

@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
 	int connectedSocket;
 	int inSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	char readChar[0];
+	char writeBuffer[256];
 	int readState;
 
 	printf("Starting server...\n");
@@ -43,10 +44,12 @@ int main(int argc, char *argv[]) {
 		{error("ERROR on binding");}
 
 
+
 	printf("Listening for connection...\n");
 
 	listen(inSocket,2); //max 2 pending connections. ready to accept incoming connections
 	clientAddressLength = sizeof(clientAddress);
+		//where are we setting client-address? cannot really send without it...
 
 
 
@@ -74,13 +77,26 @@ int main(int argc, char *argv[]) {
 			break;
 		
 		default:
-			break;
 			printf("\nReceived %c - command not recognized", readChar[0]);
 			fflush(stdout);
+
+					//test send, debugging - now test receive...
+						strncpy(writeBuffer, (char*) "test1", 6);		//working
+						if (sendto(inSocket, writeBuffer, 255, 0, (struct sockaddr *)&clientAddress, clientAddressLength) < 0)
+						{
+							error("\nError sending command ");
+							close(inSocket);
+							exit(-1);
+						}
+
+			break;
 		}
 
 	}
 	close(inSocket);
+
+
+
 
 	return 0; 
 }
