@@ -1,0 +1,47 @@
+Så er der et udkast til øv7:
+
+https://github.com/lundsedk/NGKEx7
+
+Jeg har lænet mig op ad denne:
+https://stackoverflow.com/questions/53051590/udp-server-client-c-sendto-recvfrom
+
+Status er:
+Skidtet compiler, og opfører sig som forventet ift. shell
+
+Jeg har ikke testet om den laver forbindelse mellem de to
+
+Vi skal huske at sende langsomt, så måske skal der et delay ind
+
+Der mangler:
+Server skal læse de rette filer og sende indhold (se switch case).
+Klient skal læse efter at have sendt kommando (i x antal sekunder?)
+
+
+
+---
+
+
+Øvelse 7 8/8-22/MA
+Application Layer, Transport Layer, UDP/IP_Socket_Programming
+Udstyr:
+2 stk. virtuelle Ubuntu Linux-maskiner kørende i 1 eller 2 laptops
+UDP-Client/Server:
+1. Skriv en iterativ UDP-server med support for en client ad gangen, som kan modtage en forespørgsel
+fra en client. Serveren skal bruge port 9000
+Forespørgslen fra client til server kan være en af to muligheder: ”U” eller ”L”. Om bogstaverne er
+lower case eller upper case skal være ligegyldigt.
+- Hvis serveren modtager et ”U” skal informationen i filen /proc/uptime returneres til client.
+Denne fil indeholder aktuel information om den samlede tid serveren har været kørende
+siden opstart.
+- Hvis serveren modtager et ”L” skal informationen i filen /proc/loadavg returneres til client.
+Denne fil indeholder aktuel information om serverens aktuelle CPU-load.
+2. Skriv en UDP-client kørende i en anden laptop eller virtuel maskine, som kan sende et kommando i
+form af et bogstav ”U”, ”u”, ”L”, ”l” som indtastes af operatøren til UDP-serveren. Når svaret fra UDP-
+serveren (beskrevet i punkt 1) modtages, udskrives dette svar til UDP-client’s bruger.
+3. Programmeringssprog: C/C++
+4. Følgende figur viser selve opstillingen, portnummer, og brugerfladens syntax:
+5. Optag en video, som vedlægges journalen, der demonstrerer at UDP-client/server-opstillingen
+fungerer efter hensigten.
+6. Den komplette kildekode for både server og klient vedlægges journalen i en .zip fil.
+Info om proc:
+https://linux.die.net/man/5/proc
