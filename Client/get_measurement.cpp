@@ -23,10 +23,8 @@ int main(int argc, char *argv[])
 		error("\nERROR usage: get_measurement [server IP] [u/l]\n");
 		exit(-1);
 	}
-	printf("Starting client...\n");
 
 	char receivedMess[256] = {0};
-
 	int sockfd, readState; // all used?
 	struct sockaddr_in serv_addr;
 	socklen_t serv_addr_len;
@@ -46,12 +44,10 @@ int main(int argc, char *argv[])
 	if (server == NULL)
 		error("ERROR no such host");
 
-	printf("\nServer at: %s, sending command: %c\n", argv[1], commandChar[0]);
+	//printf("\nServer at: %s, sending command: %c\n", argv[1], commandChar[0]);
 
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(PORTN);
-	//bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr, server->h_length);
-		//the below version is simpler (	serv_addr.sin_addr.s_addr = inet_addr("10.0.0.1");)
 	serv_addr.sin_addr.s_addr = inet_addr("10.0.0.1");
 	serv_addr_len = sizeof(serv_addr);
 
@@ -68,27 +64,8 @@ int main(int argc, char *argv[])
 		close(sockfd);
 		exit(-1);
 	}
-	printf("recived: %s", readBuffer);
+	printf("Server answered: %s", readBuffer);
 
-
-
-	// not done below, needs to receive into buffer array, then print it
-	// something like:
-	/*
-			serAddrLen = sizeof(serAddr);
-			readStatus = recvfrom(cliSockDes, buff, 1024, 0, (struct sockaddr*)&serAddr, &serAddrLen);
-			if (readStatus < 0) {
-			perror("reading error...\n");
-			close(cliSockDes);
-			exit(-1);
-			}
-
-			cout.write(buff, readStatus);
-			cout << endl;
-
-	*/
-
-	printf("Closing client...\n\n");
 	close(sockfd);
 	return 0;
 }

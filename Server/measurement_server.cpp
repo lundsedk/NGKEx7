@@ -28,9 +28,7 @@ int main(int argc, char *argv[]) {
 	char readChar[0];
 	char writeBuffer[256];
 	int readState;
-
-	printf("Starting server...\n");
-
+	FILE* filePtr;
 
 	if(inSocket<0){ error("ERROR opening socket");}						//check initialization of global var
 
@@ -43,19 +41,14 @@ int main(int argc, char *argv[]) {
 	if (bind(inSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) 
 		{error("ERROR on binding");}
 
-
-
-	printf("Listening for connection...\n");
-
+	//Listen
 	listen(inSocket,2); //max 2 pending connections. ready to accept incoming connections
 	clientAddressLength = sizeof(clientAddress);
 		//where are we setting client-address? cannot really send without it...
 
-
-
-				
   	while(1) {
 
+		//Wait for connection
 		readState = recvfrom(inSocket, readChar, 1, 0, (struct sockaddr*) &clientAddress, &clientAddressLength);
 		if (readState < 0) { 
 			error("\nRead error");
@@ -63,39 +56,42 @@ int main(int argc, char *argv[]) {
 			exit(-1);
 		}
 
+		//Form reply
 		switch (readChar[0])
 		{
 		case 'u':
 		case 'U':
 			printf("\nReceived %c - sending uptime", readChar[0]);
 			fflush(stdout);
+			filePtr = fopen("/proc/uptime", "r");
+			fread(writeBuffer, 1, 255, filePtr);
+			fclose(filePtr);
 			break;
 		case 'l':
 		case 'L':
 			printf("\nReceived %c - sending loadavg", readChar[0]);
 			fflush(stdout);
+			filePtr = fopen("/proc/loadavg", "r");
+			fread(writeBuffer, 1, 255, filePtr);
+			fclose(filePtr);
 			break;
-		
 		default:
 			printf("\nReceived %c - command not recognized", readChar[0]);
 			fflush(stdout);
-
-					//test send, debugging - now test receive...
-						strncpy(writeBuffer, (char*) "test1", 6);		//working
-						if (sendto(inSocket, writeBuffer, 255, 0, (struct sockaddr *)&clientAddress, clientAddressLength) < 0)
-						{
-							error("\nError sending command ");
-							close(inSocket);
-							exit(-1);
-						}
-
+			strncpy(writeBuffer, (char*) "Command not recognized", 23);
 			break;
+		}
+
+		//Send reply
+		if (sendto(inSocket, writeBuffer, 255, 0, (struct sockaddr *)&clientAddress, clientAddressLength) < 0)
+		{
+			error("\nError sending command ");
+			close(inSocket);
+			exit(-1);
 		}
 
 	}
 	close(inSocket);
-
-
 
 
 	return 0; 
